@@ -287,6 +287,7 @@ SVGColor SVGColorFromString (const char *string) {
 		
 		int accumIdx = 0, currComponent = 0;
 		Phase phase = PhaseNone;
+        bool isPercentRGB = (!strcmp(strrchr(string, '\0') - 2, "%)"));
 		
 		for (size_t n = 0; n < len; n++) {
 			char c = string[n];
@@ -308,15 +309,15 @@ SVGColor SVGColorFromString (const char *string) {
 			if (phase == PhaseRGB || phase == PhaseRGBA) {
 				if (c == ',') {
 					if (currComponent == 0) {
-						color.r = atoi(accum);
+                        color.r = isPercentRGB ? (uint8_t)lround(atof(accum) / 100 * 255.0f) : atoi(accum);
 						currComponent++;
 					}
 					else if (currComponent == 1) {
-						color.g = atoi(accum);
+                        color.g = isPercentRGB ? (uint8_t)lround(atof(accum) / 100 * 255.0f) : atoi(accum);
 						currComponent++;
 					}
                     else if (phase == PhaseRGBA && currComponent == 2) {
-                        color.b = atoi(accum);
+                        color.b = isPercentRGB ? (uint8_t)lround(atof(accum) / 100 * 255.0f) : atoi(accum);
                         currComponent++;
                     }
 					bzero(accum, MAX_ACCUM);

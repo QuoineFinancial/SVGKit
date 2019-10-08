@@ -1,4 +1,4 @@
-#import "Document.h"
+#import "DOMDocument.h"
 
 @interface Document ()
 
